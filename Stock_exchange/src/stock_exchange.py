@@ -33,7 +33,6 @@ s5= Spolka("McDonald", 42.56)
 s6= Spolka("KFC", 42.56)
 s7= Spolka("Browar Amber", 42.56)
 s8= Spolka("orlen", 42.56)
-s9= Spolka("orlen", 42.56)
 
 
 spolki =[s1,s2,s3,s4]
@@ -54,9 +53,9 @@ def pokaz_portfolio():
         if portfolio.get(spolka)==0:
             del portfolio[spolka]
     
-    print("Twoje portfolio")  
+    print("Portfolio")  
     print("-------------------------------")   
-    print("Spółka | Cena | Sztuk | Wartość")  
+    print("Company | Price | Number | USD")  
     print("-------------------------------")       
     
     
@@ -81,9 +80,9 @@ def pokaz_portfolio():
     
 def pokaz_spolki():
     
-    print("Dostępne spółki") 
+    print("  Companies   ") 
     print("--------------")  
-    print("Spółka | Cena")
+    print("Name   | Price")
     print("--------------")  
     for spolka in spolki:
         print("%s" % spolka.display())
@@ -101,7 +100,7 @@ def check_portfolio(firma):
             return "valid"
 
 
-print("Witaj w grze Gielda.")
+print("Stock Exchange.")
 
 koniec = ""
 handel_koniec = ""
@@ -109,7 +108,7 @@ handel_koniec = ""
 
 while koniec != "tak":
     handel_koniec = ""
-    print("Twój budzet wynosi %.2f PLN.\n" % float(budzet))
+    print("Your budget: %.2f USD.\n" % float(budzet))
     
     pokaz_spolki()
     
@@ -117,8 +116,8 @@ while koniec != "tak":
         k_s=""
         handel_koniec = ""
         while k_s != 'k' and  k_s != 's' and  k_s != 't':
-            k_s = input("Kupno spółki (k)\nSprzedaż spółki (s)\nZakończenie tury(t)\nSprawdz portfolio "
-            "(p)\nDodaj spółkę (d)\nUsuń spółkę (u)\n")
+            k_s = input("Buy shares (k)\nSell shares (s)\nEnd of round(t)\nCheck portfolio "
+            "(p)\nAdd company (d)\nDelete company (u)\n")
             
             if k_s =='p':
                 pokaz_portfolio()
@@ -126,20 +125,20 @@ while koniec != "tak":
             #Dodawanie spółki    
             elif k_s == 'd':
                 
-                nazwa = input("Podaj nazwę spółki: ")
+                nazwa = input("Name of the company: ")
                 
                 koniec = "nie"
                 while koniec != "tak":
-                    cena = input("Podaj cenę początkową spółki (używaj kropki, a nie przecinka): ")
+                    cena = input("Name of the company (use dots): ")
                     if ',' in cena:
-                        print("Użyj kropki zamiast przecinka.")
+                        print("use '.'")
                         continue
                     if isinstance(float(cena), float):
                         koniec ="tak"
                     elif isinstance(int(cena), int):
                         koniec ="tak"
                     else:
-                        print("Wprowadz poprawną cenę.")
+                        print("Enter correct price.")
                 
                 spolka = Spolka(nazwa,float(cena))
                 spolki.append(spolka)
@@ -150,10 +149,10 @@ while koniec != "tak":
             elif k_s == 'u':
                 
                 while koniec != "tak":
-                    nazwa = input("Podaj nazwę spółki, którą chcesz usunąć: ")
+                    nazwa = input("Enter company name to delete: ")
                     
                     if not check_spolka(nazwa) == 'valid':
-                        print("Wprowadz poprawną nazwę spółki.")
+                        print("Enter correct company name.")
                     else:
                         koniec = "tak"
                 
@@ -168,12 +167,12 @@ while koniec != "tak":
         
         #Kupno
         elif k_s == 'k':
-            zakup = input("Jaką spółkę chcesz kupić?")
+            zakup = input("Which comapny would you like to buy?")
             sztuki=""
             
             
             if not check_spolka(zakup) == "valid":
-                print("Taka spółka nie istnieje")
+                print("This company does not exists.")
                 continue
             
             #Szukanie ceny dla zakupionej spółki
@@ -182,7 +181,7 @@ while koniec != "tak":
                     cena_spolki = spolka.cena
                     
             while not sztuki.isnumeric():
-                sztuki = input("Ile sztuk chcesz kupic spółki %s, której cena wynosi %.2f PLN? Pieniędzy starczy Ci na %d szt." % (zakup, cena_spolki, budzet/cena_spolki))
+                sztuki = input("How many shares of %s, which price is %.2f USD? You can afford %d shares." % (zakup, cena_spolki, budzet/cena_spolki))
             
             
            
@@ -190,7 +189,7 @@ while koniec != "tak":
             kwota = int(sztuki) * cena_spolki
             
             if budzet - kwota <0:
-                print("Nie posiadasz wystarczająco środków.")
+                print("You do not have enough money.")
                 continue
             else:
                 budzet -= kwota
@@ -204,26 +203,26 @@ while koniec != "tak":
             
             
             while handel_koniec != "tak" and handel_koniec != "nie":
-                print("Kupiono %s sztuk spólki %s  za kwotę %.2f" % (str(sztuki), str(zakup),kwota) +" PLN.\n")
+                print("You have bought %s shares of %s for %.2f" % (str(sztuki), str(zakup),kwota) +" USD.\n")
                 
                 pokaz_portfolio()
-                handel_koniec = input("\nTwój budżet wynosi %.2f PLN. Czy chcesz zakończyć handel i przejść do kolejnej tury? [tak/nie]" % budzet)
+                handel_koniec = input("\nYour budget: %.2f USD. Would you like to end this round? [tak/nie]" % budzet)
         
         #Sprzedaz    
         elif k_s == 's':
             sztuki=""
             if not portfolio:
-                print("Nie masz żadnych akcji.")    
+                print("There is no shares.")    
                 continue
                
-            sprzedaz = input("Jaką spółkę chcesz sprzedac?")
+            sprzedaz = input("What company would you like to sell?")
             
             if not check_portfolio(sprzedaz) == "valid":
-                print("Nie posiadasz takiej spółki w swoim portfolio lub taka spółka nie istnieje.")
+                print("You do not own shares of this company or the company does not exists.")
                 continue
             
             if not check_spolka(sprzedaz) == "valid":
-                print("Taka spółka nie istnieje.")
+                print("This company does not exists.")
                 continue
             
             
@@ -239,7 +238,7 @@ while koniec != "tak":
              
             #Trzeba odnalezc liczbe sztuk jak jest przypisana do danego obiektu    
             while not sztuki.isnumeric():
-                sztuki = input("Ile sztuk chcesz sprzedać spółki %s, której cena wynosi %.2f PLN? Posiadasz %d szt." % 
+                sztuki = input("How many shares of %s would you like to sell, the price is %.2f USD? You own %d shares." % 
                                (sprzedaz,cena_spolki, portfolio.get(sprzedawana_spolka)))
             
             
@@ -248,23 +247,23 @@ while koniec != "tak":
             
             
             if int(sztuki) > int(portfolio.get(sprzedawana_spolka)):
-                print("Nie masz wystarczająco akcji spółki %s. Posiadasz %d akcji, a chcesz sprzedac %d." % (sprzedaz, portfolio.get(sprzedawana_spolka), int(sztuki)))
+                print("You do not have enough shares of %s. You own %d shares, and you want to sell %d." % (sprzedaz, portfolio.get(sprzedawana_spolka), int(sztuki)))
                 continue
             
             portfolio.update({sprzedaz:(portfolio.get(sprzedawana_spolka) -int(sztuki))})
             
             
             while handel_koniec != "tak" and handel_koniec != "nie":
-                print("Sprzedano %d sztuk spólki %s  za kwotę %.2f" % (int(sztuki), str(sprzedaz),float(kwota)) + " PLN.\n")
+                print("%d shares of %s have been sold for %.2f" % (int(sztuki), str(sprzedaz),float(kwota)) + " USD.\n")
                 pokaz_portfolio()
                 
                 
-                handel_koniec = input("\nTwój budżet wynosi %.2f PLN. Czy chcesz zakończyć handel i przejść do kolejnej tury? [tak/nie]" % budzet)
+                handel_koniec = input("\nYour budget: %.2f PLN. Would yo like to end this round? [tak/nie]" % budzet)
                     
     
     print()
     print("************************************")        
-    print("* Aktualizowanie cen giełdowych... *")
+    print("*       Price actualization        *")
     print("************************************") 
     print()
     for spolka in spolki:
